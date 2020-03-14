@@ -6,7 +6,7 @@
   <link href="/mamamooo.github.io/atom.xml" rel="self"/>
   
   <link href="https://mamamooo.github.io/"/>
-  <updated>2020-03-14T01:03:48.949Z</updated>
+  <updated>2020-03-14T08:32:43.440Z</updated>
   <id>https://mamamooo.github.io/</id>
   
   <author>
@@ -21,13 +21,23 @@
     <link href="https://mamamooo.github.io/2020/03/14/hello/"/>
     <id>https://mamamooo.github.io/2020/03/14/hello/</id>
     <published>2020-03-14T01:03:48.000Z</published>
-    <updated>2020-03-14T01:03:48.949Z</updated>
+    <updated>2020-03-14T08:32:43.440Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="https://i.imgur.com/4wwwt5X.jpg" alt=""></p>]]></content>
     
     <summary type="html">
+    
+      
+      
+        &lt;p&gt;&lt;img src=&quot;https://i.imgur.com/4wwwt5X.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+
+      
     
     </summary>
     
     
+    
+      <category term="none" scheme="https://mamamooo.github.io/tags/none/"/>
     
   </entry>
   
