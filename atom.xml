@@ -6,7 +6,7 @@
   <link href="/mamamooo.github.io/atom.xml" rel="self"/>
   
   <link href="https://mamamooo.github.io/"/>
-  <updated>2020-03-14T08:43:51.297Z</updated>
+  <updated>2020-03-14T08:49:03.888Z</updated>
   <id>https://mamamooo.github.io/</id>
   
   <author>
@@ -15,6 +15,44 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>test</title>
+    <link href="https://mamamooo.github.io/2020/03/14/test/"/>
+    <id>https://mamamooo.github.io/2020/03/14/test/</id>
+    <published>2020-03-14T08:49:03.000Z</published>
+    <updated>2020-03-14T08:49:03.888Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>ceshi</title>
+    <link href="https://mamamooo.github.io/2020/03/14/ceshi/"/>
+    <id>https://mamamooo.github.io/2020/03/14/ceshi/</id>
+    <published>2020-03-14T08:48:42.000Z</published>
+    <updated>2020-03-14T08:51:06.288Z</updated>
+    
+    <content type="html"><![CDATA[<p>![mamamoo]mamamoo.jpg</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;![mamamoo]mamamoo.jpg&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
   
   <entry>
     <title>python</title>
