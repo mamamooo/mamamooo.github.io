@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="stx," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="MaMaMoo" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="StarlingX GUI 源码分析代码架构GUI部分代码主要为starlingX dashboard的代码，主要功能为界面的操作和底层其他组件（Nova，Neutron，Cinder等）的交互。代码架构为Django框架。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="stx-gui">
+<meta property="og:url" content="https://mamamooo.github.io/2020/03/16/stx-gui/index.html">
+<meta property="og:site_name" content="MaMaMoo">
+<meta property="og:description" content="StarlingX GUI 源码分析代码架构GUI部分代码主要为starlingX dashboard的代码，主要功能为界面的操作和底层其他组件（Nova，Neutron，Cinder等）的交互。代码架构为Django框架。">
+<meta property="article:published_time" content="2020-03-16T03:06:31.000Z">
+<meta property="article:modified_time" content="2020-03-16T03:07:07.497Z">
+<meta property="article:author" content="mamamooo">
+<meta property="article:tag" content="stx">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://mamamooo.github.io/2020/03/16/stx-gui/"/>
+
+
+
+
+
+  <title>stx-gui | MaMaMoo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/mamamooo" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#64CEAA; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MaMaMoo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Stay Hungry, Stay Foolish</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mamamooo.github.io/2020/03/16/stx-gui/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mamamooo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MaMaMoo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">stx-gui</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-16T11:06:31+08:00">
+                2020-03-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="StarlingX-GUI-源码分析"><a href="#StarlingX-GUI-源码分析" class="headerlink" title="StarlingX GUI 源码分析"></a>StarlingX GUI 源码分析</h1><p>代码架构<br>GUI部分代码主要为starlingX dashboard的代码，主要功能为界面的操作和底层其他组件（Nova，Neutron，Cinder等）的交互。代码架构为Django框架。</p>
+<a id="more"></a> 
+
+<p>Django是一个基于Python的高效的Web开发框架，它提供了通用的Web开发模式的高度抽象；目的是为了可以简便的、快速的开发数据库驱动的网站，强调代码的复用，多个组件可以很方便的以“插件”的形式存在于整个框架中。</p>
+<p>代码目录如图</p>
+<h1 id="代码目录分析"><a href="#代码目录分析" class="headerlink" title="代码目录分析"></a>代码目录分析</h1><h2 id="api"><a href="#api" class="headerlink" title="api"></a>api</h2><p>主要是与其他组件的api接口代码</p>
+<h2 id="Dashboards"><a href="#Dashboards" class="headerlink" title="Dashboards"></a>Dashboards</h2><p>主要负责后端逻辑。如登录页面，添加节点等操作</p>
+<p>#Enabled<br>新增plane模块的注册配置，此处代码的主要功能是面板组的定义。</p>
+<p>#Horizon<br>主要提供最基础的构件，如页面所需的表格、表单等基础部分；</p>
+<p>#Static<br>主要存放前端代码。</p>
+<p>#代码分析<br>##Dashboards模块<br>###Admin<br>此部分代码包括<br>active_alarms<br>controller_services<br>datanets<br>events<br>events_suppression<br>host_topology<br>inventory<br>software_management<br>storage_overview<br>system_config<br>10个小模块，对应的页面的各自功能。<br>页面图待补</p>
+<p>代码流程，此处以inventory为例讲解：<br>Inventory  主要功能是节点的增删改查操作，主要与底层的sysinv模块交互。</p>
+<p>####1.首先在enabled目录下注册inventory模块的plane，<br>即starlingx_dashboard/enabled/_2035_starlingx_admin_inventory_panel.py文件</p>
+<p>ADD_PANEL = ‘starlingx_dashboard.dashboards.admin.inventory.panel.Inventory’<br>此处为class Inventory的位置</p>
+<p>####2.    Inventory类<br>Inventory类位于starlingx_dashboard/dashboards/admin/inventory/panel.py文件下:</p>
+<pre><code>
+class Inventory(horizon.Panel):        #面板类   
+    name = _("Host Inventory")        #面板名字
+    slug = 'inventory'            #面板短名字（面板url路径的短名字）Slug会为每条model记录
+    permissions = ('openstack.roles.admin',)
+    permissions = ('openstack.services.platform',)   #权限名称列表，定义了用户是否有权限访问该面板
+
+    def allowed(self, context):
+       ……
+    def nav(self, context):        #导航条，判断该面板是否出现导航
+        ……
+</code></pre>
+
+<p>####3.    页面功能管理<br>starlingx_dashboard/dashboards/admin/inventory/tables.py文件下主要为各个页面的功能的class。如Hosts，HostsController以及他的子功能AddHost，EditHost，DeleteHost等。</p>
+<p>首先分析class Hosts：</p>
+<pre><code>
+class Hosts(tables.DataTable):
+    hostname = tables.Column('hostname',
+                             link="horizon:admin:inventory:detail",
+                             verbose_name=_('Host Name'))
+    personality = tables.Column(
+        "personality",
+        verbose_name=_("Personality"),
+        display_choices=stx_api.sysinv.Host.PERSONALITY_DISPLAY_CHOICES)
+    admin = tables.Column("administrative",
+                          verbose_name=_("Admin State"),
+                          display_choices=stx_api.sysinv.
+                          Host.ADMIN_DISPLAY_CHOICES)
+    oper = tables.Column("operational",
+                         verbose_name=_("Operational State"),
+                         display_choices=stx_api.sysinv.
+                         Host.OPER_DISPLAY_CHOICES)
+    avail = tables.Column("availability",
+                          verbose_name=_("Availability State"),
+                          display_choices=stx_api.sysinv.
+                          Host.AVAIL_DISPLAY_CHOICES)
+    uptime = tables.Column('boottime',
+                           verbose_name=_("Uptime"),
+                           filters=(filters.timesince_sortable,),
+                           attrs={'data-type': 'timesince'})
+
+    task = tables.Column(get_task_or_status,
+                         cell_attributes_getter=get_install_percent,
+                         verbose_name=_("Status"),
+                         filters=(safe,),
+                         status=True,
+                         status_choices=TASK_STATE_CHOICES)
+
+    def get_object_id(self, datum):
+        return str(datum.id)
+
+    def get_object_display(self, datum):
+        return datum.hostname
+</code></pre>
+<p>通过tables.Column接口，会在界面上生成相应的表单，如hostname，personality 等。</p>
+<p>HostsController类，控制节点的视图。HostsStorage类，HostsWorker类分别为存储和计算节点的视图类，主要包括增删改查的类，通过row_actions添加。<br><code><pre><br>class HostsController(Hosts):<br>    class Meta(object):<br>        name = "hostscontroller"<br>        verbose_name = _("Controller Hosts")<br>        status_columns = ["task"]<br>        row_class = UpdateRow<br>        multi_select = True<br>        row_actions = (<br>            EditHost, LockHost, ForceLockHost, UnlockHost, ForceUnlockHost,<br>            SwactHost,<br>            PowerOnHost,<br>            PowerOffHost, RebootHost,<br>            ResetHost, ReinstallHost, PatchInstallAsync, DeleteHost)<br>        table_actions = (AddHost,)<br>        hidden_title = False<br></pre></code><br>增删改查等功能的这些类都比较近似，主要是通过各自的handle（）方法来处理的，以DeleteHost类为例。<br><code><pre><br>class DeleteHost(tables.DeleteAction):<br>    ……<br>    def delete(self, request, host_id):<br>        stx_api.sysinv.host_delete(request, host_id)<br>    def handle(self, table, request, obj_ids):<br>        return handle_sysinv(self, table, request, obj_ids)<br></pre></code></p>
+<p>当用户点击删除按钮时，会触发handle接口，从而在调用delete接口，delete调用sysinv的api通过cgts将请求发送给sysinv模块，sysinv删除节点</p>
+<p>####4.    Tab页面管理<br>starlingx_dashboard/dashboards/admin/inventory/tabs.py文件主要为各个tab页的类。<br>主要包括HostsTab，CpuProfilesTab，InterfaceProfilesTab，主要功能是获取环境的信息并按照一定的格式显示。<br>如HostsTab类：<br><code><pre><br>class HostsTab(tabs.TableTab):<br>    table_classes = (toplevel_tables.HostsController,<br>                     toplevel_tables.HostsStorage,<br>                     toplevel_tables.HostsWorker,<br>                     toplevel_tables.HostsUnProvisioned,)<br>      #此处四种类型的hosts节点的表<br>    template_name = ("admin/inventory/_hosts.html")<br>    #前端html页面<br>    通过接口获取所有节点信息，主要是通过下发api的方式获取，如：<br>    def get_all_hosts_data(self):<br>       ... ...<br>    stx_api.sysinv.host_list<br>    ... ...<br>    处理数据并以一定的格式显示数据到HTML上<br>    def load_table_data(self):<br>    ... ...<br>    def get_context_data(self, request):<br></pre></code><br>####5.     urls路由</p>
+<p>starlingx_dashboard/dashboards/admin/inventory/urls.py，此文件中为相关的路由，写在一起方便调用。</p>
+<p>####6.    Views<br>starlingx_dashboard/dashboards/admin/inventory/views.py，为视图文件</p>
+<p>####7.    Workflows<br>starlingx_dashboard/dashboards/admin/inventory/workflows.py，主要是AddHost和UpdateHost工作流程</p>
+<p>以AddHost为例，<br><code><pre><br>class AddHost(workflows.Workflow):<br>    slug = "add"<br>    name = _("Add Host")<br>... ...<br>    def handle(self, request, data):<br>        self.hostname = data['hostname']<br>        self.mgmt_mac = data['mgmt_mac']<br>        try:<br>            host = stx_api.sysinv.host_create(request, **data)<br>            return True if host else False<br>        except exc.ClientException as ce:<br>            # Display REST API error on the GUI<br>            LOG.error(ce)<br>            msg = self.failure_message + " " + str(ce)<br>            self.failure_message = msg<br>            return False<br>        except Exception as e:<br>            msg = self.format_status_message(self.failure_message) + str(e)<br>            exceptions.handle(request, msg)<br>            return False<br></pre></code><br>主要是前台触发按钮后进入handle接口处理，将数据下发给sysinv模块，sysinv再根据数据添加节点。</p>
+<p>Admin目录下还有active_alarms，controller_services，datanets，events，events_suppression，host_topology，inventory，software_management，storage_overview<br>，system_config等功能，他们都采用了统一Django架构，以及统一的代码风格，不同的模块之间可以相互参考。此处不再一一分析。</p>
+<p>####DcAdmin<br>此处为OpenStack多Region管理页面。</p>
+<p>所谓openstack多region，就是多套openstack共享一个keystone和horizon。每个区域一套openstack环境，可以分布在不同的地理位置，只要网络可达就行。个人认为目的就是为了提供环境隔离的功能，选择启虚拟机的时候可以根据自己所处的位置就近选择。</p>
+<p>目录：</p>
+<p>主要包括管理页面显示，以及多region的软件管理功能。</p>
+<p>##Api模块<br>此部分内容主要包括”base”,”ceph”,”dc_manager”,”fm”,”neutron”,”patch”,”sysinv”,”vim”,<br>8部分的api接口，分别在不同的名称对应文件中方便管理。</p>
+<p>###base<br>starlingx_dashboard/api/base.py<br>此处、主要导入了开源的base接口<br>from openstack_dashboard.api import base</p>
+<p>同时添加了两个公共接口，get_request_page_size（判断请求长度），is_stx_region（判断platform服务是否正常）</p>
+<p>###ceph<br>主要实现了前台与底层ceph模块的交互<br>导入wrapper模块<br>from cephclient import wrapper</p>
+<p>定义ceph模块的类如OSD，Cluster，Storage<br>以及处理函数cluster_get，storage_get _get_quorum_status，monitor_list，osd_list等，通过cephwrapper()进行与ceph后台模块的交互</p>
+<p>如monitor_list接口：<br>在admin 的StorageServicesTab页面，需要显示storage_services的一些信息，通过调用get_monitors_data接口，调用到ceph.monitor_list，然后monitor_list通过cephwrapper接口将请求下发到ceph后台，请求成功后返回response<br>，再在monitor_list解析返回数据，返回给get_monitors_data接口。</p>
+<p>###dc_manager<br>主要实现了前台与底层dc_manager模块的交互<br>导入交互需要的client模块<br>from dcmanagerclient.api.v1 import client<br>dcmanagerclient方法为将原有的client进行封装。</p>
+<p>此部分的主要接口有，<br>获取告警的alarm_summary_list接口<br>获取子cloud信息的subcloud_list接口<br>增加子cloud信息的subcloud_create接口<br>删除子cloud信息的subcloud_delete接口<br>修改子cloud信息的subcloud_update接口<br>配置子cloud信息的subcloud_generate_config接口</p>
+<p>软件升级策略的类Strategy及其相关的软件升级接口</p>
+<p>###fm<br>主要实现了前台与底层fm告警模块的交互</p>
+<p>主要流程为用户触发告警页面的功能后，此部分模块通过fmclient接口，与底层的fm模块进行数据交互</p>
+<p>###iservice<br>主要实现了前台与底层sm模块的交互<br>有两个接口<br>sm_sda_list 用于获取控制节点磁盘的信息<br>sm_nodes_list 用于获取节点信息<br>Neutron<br>主要实现了前台与底层Neutron网络模块的交互。<br>此处主要是添加了Providernet的api和qos的api组件。</p>
+<p>包括<br>Providernet的接口：<br><code><pre><br>provider_network_type_list<br>provider_network_create<br>provider_network_list<br>provider_network_list_for_tenant<br>provider_network_list_tenant_networks<br>provider_network_get<br>provider_network_delete<br>provider_network_modify<br>provider_network_range_create<br>provider_network_range_list<br>provider_network_range_get<br>provider_network_range_delete<br>provider_network_range_modify<br></pre></code><br>和qos的接口：<br><code><pre><br>qos_list<br>qos_get<br>qos_create<br>qos_update<br></pre></code><br>###patch<br>主要实现了前台与底层patch模块的交互。url基本为url += “/patch/%s” % (api_cmd)</p>
+<p>在这部分代码，定义了新的client类<br>class Client(object)，它的方法有patch的get，show，upload，apply，remove以及相关节点的host_install，host_install_async操作</p>
+<p>apply patch在dashboard的流程</p>
+<p>###sysinv<br>主要实现了前台与底层sysinv模块的交互，主要功能是操作host节点的增删改查。</p>
+<p>Cgtsclient主要是重新封装了cgts_client的接口，用于下发api。<br>主要的接口对应页面的内容可以分为以下几类：</p>
+<ol>
+<li>Host<br>主要有host信息查询的personality，boottime，patch_state，host操作的host_create，host_update，host_delete，host_lock，host_force_lock，host_unlock，host_reboot，host_swact等等。<br>此处调用大体是一致的，以host_swact为例：</li>
+</ol>
+<p>stx_api.sysinv.host_swact(request, host_id)<br>首先，调用host_swact接口<br><code><pre><br>def host_swact(request, host_id):<br>    kwargs = {'action': 'swact'}<br>    host = host_update(request, host_id, *<em>kwargs)<br>    return host<br></em></pre></code><br>   api部分拼接swact的参数，再传参到update接口，<br><code><pre><br>def host_update(request, host_id, *kwargs):<br>    LOG.debug("host_update(): host_id=%s, kwargs=%s", host_id, kwargs)<br>    mypatch = []<br>    for key, value in kwargs.items():<br>        mypatch.append(dict(path='/' + key, value=value, op='replace'))<br>    return cgtsclient(request).ihost.update(host_id, mypatch)<br></pre></code><br>   在update过程中，继续拼接至完整的api的 ulr字符串，再由cgtsclient下发到后台处理。</p>
+<p>host_label_get，host_label_assign，host_label_remove等，功能是为host添加标签。</p>
+<ol start="2">
+<li>网络<br>主要包括Interface， Network， Port，SDNController等<br>Interface<br><code><pre><br>host_interface_list<br>host_interface_get<br>host_interface_create<br>host_interface_update<br>host_interface_delete<br></pre></code><br>Network<br><code><pre><br>network_list<br>network_get<br>network_create<br>network_delete<br></pre></code><br>InterfaceNetwork<br><code><pre><br>interface_network_list_by_interface<br>interface_network_get<br></pre></code><br>Port<br><code><pre><br>get_port_display_name<br></pre></code><br>SDNController<br><code><pre><br>sdn_controller_list<br>sdn_controller_get<br>sdn_controller_create<br>sdn_controller_update<br>sdn_controller_delete<br></pre></code></li>
+</ol>
+<p>###3.    存储<br>主要包括Disk的物理信息，ceph的配置信息，以及storage的配置信息等接口。</p>
+<p>###4.    其他信息<br>此外，还有一些其他信息的接口如，ntp，lldp等信息</p>
+<p>##vim<br>主要实现了前台与底层patch模块中升级策略strategy的交互，主要功能为补丁的策略升级和版本升级。</p>
+<p>文件中导入的client的类<br>from nfv_client.openstack import sw_update<br>STRATEGY_SW_PATCH = ‘sw-patch’<br>STRATEGY_SW_UPGRADE = ‘sw-upgrade’</p>
+<p>此部分代码主要流程相似，以create_strategy为例。<br>create_strategy的流程</p>
+<p>##主题<br>此部分主要分析主题开发过程的逻辑。</p>
+<p>###1.    主题配置文件<br>starlingx_dashboard/local/local_settings.d/_30_stx_local_settings.py<br>此文件主要涵盖了主题文件的路径，配置，以及时区配置<br><code><pre><br>AVAILABLE_THEMES = [<br>    ('default', 'Default', 'themes/default'),<br>    ('material', 'Material', 'themes/material'),<br>    ('starlingx', 'StarlingX', 'themes/starlingx'),<br>]<br>DEFAULT_THEME = 'starlingx'<br></pre></code><br>从这部分代码，可以分析，我们如果要添加新的主题，需要在此处更新，并将DEFAULT_THEME改成我们需要的。<br><code><pre><br>for root, _dirs, files in os.walk('/opt/branding/applied'):<br>    if 'manifest.py' in files:<br>        with open(os.path.join(root, 'manifest.py')) as f:<br>            code = compile(f.read(), os.path.join(root, 'manifest.py'), 'exec')<br>            exec(code)</pre></code></p>
+<pre><code>AVAILABLE_THEMES = [
+    (&apos;default&apos;, &apos;Default&apos;, &apos;themes/default&apos;),
+    (&apos;material&apos;, &apos;Material&apos;, &apos;themes/material&apos;),
+    (&apos;starlingx&apos;, &apos;StarlingX&apos;, &apos;themes/starlingx&apos;),
+    (&apos;custom&apos;, &apos;Custom&apos;, &apos;/opt/branding/applied&apos;),
+]
+DEFAULT_THEME = &apos;custom&apos;</code></pre><p>STATIC_ROOT = "/www/pages/static"<br>COMPRESS_OFFLINE = True<br><br>此部分代码中，可以看出’starlingx’主题的文件路径位于themes/starlingx目录。</p>
+<p>###2．主题文件themes/starlingx</p>
+<p>此部分文件主要是前台的html和css文件，一般 修改主题，不会大规模的修改html的样式，我们一般只是更换厂商的logo，修改平台名称等。<br>Logo文件位于starlingx_dashboard/themes/starlingx/static/img目录</p>
+<p>logo-splash.svg 是登录界面的大logo，更换时替换自己的svg图片。<br>logo.png主页面左上的brand图片，注意大小即可。<br>此外，可以根据不同的风格修改前端代码进行定制开发。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="mamamooo 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="mamamooo 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/stx/" rel="tag"><i class="fa fa-tag"></i> stx</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">mamamooo</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/mamamooo" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#StarlingX-GUI-源码分析"><span class="nav-number">1.</span> <span class="nav-text">StarlingX GUI 源码分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码目录分析"><span class="nav-number">2.</span> <span class="nav-text">代码目录分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#api"><span class="nav-number">2.1.</span> <span class="nav-text">api</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dashboards"><span class="nav-number">2.2.</span> <span class="nav-text">Dashboards</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mamamooo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
