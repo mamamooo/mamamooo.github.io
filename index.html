@@ -341,25 +341,15 @@
 
       
         
-          
-            <h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p><strong>map()</strong> 会根据提供的函数对指定序列做映射。</p>
+          <h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p><strong>map()</strong> 会根据提供的函数对指定序列做映射。</p>
 <p>第一个参数 function 以参数序列中的每一个元素调用 function 函数，返回包含每次 function 函数返回值的新列表。</p>
-<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><p>map() 函数语法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">map(function, iterable, ...)</span><br></pre></td></tr></table></figure>
-
-<h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><ul>
-<li>function – 函数</li>
-<li>iterable – 一个或多个序列</li>
-</ul>
-<h2 id="返回值"><a href="#返回值" class="headerlink" title="返回值"></a>返回值</h2><p>Python 2.x 返回列表。</p>
-<p>Python 3.x 返回迭代器。</p>
-<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>以下实例展示了 map() 的使用方法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">\&gt;&gt;&gt;def square(x) :            # 计算平方数 </span><br><span class="line">...     return x ** 2 ...  </span><br><span class="line">&gt;&gt;&gt; map(square, [1,2,3,4,5])   # 计算列表各个元素的平方 [1, 4, 9, 16, 25] </span><br><span class="line">&gt;&gt;&gt; map(lambda x: x ** 2, [1, 2, 3, 4, 5])  # 使用 lambda 匿名函数</span><br><span class="line">[1, 4, 9, 16, 25] </span><br><span class="line"></span><br><span class="line"># 提供了两个列表，对相同位置的列表数据进行相加 </span><br><span class="line">&gt;&gt;&gt; map(lambda x, y: x + y, [1, 3, 5, 7, 9], [2, 4, 6, 8, 10]) [3, 7, 11, 15, 19]</span><br></pre></td></tr></table></figure>
-
-
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line"></span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">将一个罗马数字转化为阿拉伯数字，范围在1-3999。下面是罗马数字的介绍及基本规则：</span><br><span class="line">罗马数字采用七个罗马字母作数字、即Ⅰ（1）、X（10）、C（100）、M（1000）、V（5）、L（50）、D（500）</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">class Solution(object):</span><br><span class="line">    def RomaToInt(self,s):</span><br><span class="line">        map &#x3D; &#123;&quot;M&quot;:1000, &quot;D&quot;:500,&quot;C&quot;:100, &quot;L&quot;:50, &quot;X&quot;:10,&quot;V&quot;:5,&quot;I&quot;:1&#125;</span><br><span class="line">        result &#x3D; 0</span><br><span class="line">        for i in range(len(s)):</span><br><span class="line">          if i &gt; 0 and map[s[i]] &gt; map[s[i-1]]:</span><br><span class="line">              result -&#x3D; map[s[i-1]]</span><br><span class="line">              result +&#x3D; map[s[i]] - map[s[i-1]]</span><br><span class="line">          else:</span><br><span class="line">              result +&#x3D; map[s[i]]</span><br><span class="line">        return result</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &quot;__main__&quot;:</span><br><span class="line">    print (Solution().RomaToInt(&quot;XII&quot;))</span><br><span class="line">    print(Solution().RomaToInt(&quot;XXI&quot;) )</span><br><span class="line">    print( Solution().RomaToInt(&quot;XCI&quot;) )</span><br></pre></td></tr></table></figure>
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/04/08/py1/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
